@@ -18,7 +18,7 @@ func registerUpdateMirrorTask() {
 	RegisterTaskFatal("update_mirrors", &BaseConfig{
 		Enabled:    true,
 		RunAtStart: false,
-		Schedule:   "@every 10m",
+		Schedule:   "@every 5s", // fix: 默认每隔5秒检查镜像仓库
 	}, func(ctx context.Context, _ *models.User, _ Config) error {
 		return mirror_service.Update(ctx)
 	})
