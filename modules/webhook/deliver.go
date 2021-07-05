@@ -264,14 +264,11 @@ func InitDeliverHooks() {
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: setting.Webhook.SkipTLSVerify},
 			Proxy:           webhookProxy(),
 			Dial: func(netw, addr string) (net.Conn, error) {
-				conn, err := net.DialTimeout(netw, addr, timeout)
-				if err != nil {
-					return nil, err
-				}
+				return net.DialTimeout(netw, addr, timeout) // connect timeout
 
-				return conn, conn.SetDeadline(time.Now().Add(timeout))
 			},
 		},
+		Timeout: timeout, // request timeout
 	}
 
 	go graceful.GetManager().RunWithShutdownContext(DeliverHooks)
